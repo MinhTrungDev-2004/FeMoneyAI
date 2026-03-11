@@ -68,14 +68,13 @@ const CategoryModal: React.FC<CategoryModalProps> = ({ mode, initial, onSave, on
                             {PreviewIcon && <PreviewIcon size={22} className={selectedColor.colorClass} strokeWidth={1.5} />}
                         </div>
                         <div>
-                            <p className="text-xs text-gray-400 font-medium">Xem trước</p>
                             <p className="text-sm font-bold text-gray-800 mt-0.5">{label || "Tên danh mục"}</p>
                         </div>
                     </div>
 
                     {/* Category name */}
                     <div>
-                        <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                        <label className="block text-xs font-semibold font-bold text-gray-800 uppercase tracking-wide mb-2 text-left">
                             Tên danh mục
                         </label>
                         <input
@@ -91,7 +90,7 @@ const CategoryModal: React.FC<CategoryModalProps> = ({ mode, initial, onSave, on
 
                     {/* Color picker */}
                     <div>
-                        <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                        <label className="block text-xs font-semibold font-bold text-gray-800 uppercase tracking-wide mb-2 text-left">
                             Màu sắc
                         </label>
                         <div className="grid grid-cols-8 gap-2">
@@ -116,7 +115,7 @@ const CategoryModal: React.FC<CategoryModalProps> = ({ mode, initial, onSave, on
 
                     {/* Icon picker */}
                     <div>
-                        <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                        <label className="block text-xs font-semibold font-bold text-gray-800 uppercase tracking-wide mb-2 text-left">
                             Icon
                         </label>
                         <div className="grid grid-cols-7 gap-2">

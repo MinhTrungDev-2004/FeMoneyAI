@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import Sidebar, { type NavItem } from "./Sidebar";
 import Header from "./Header";
 import Footer from "./Footer";
+import { ChatBot } from "../chat";
 
 interface DashboardLayoutProps {
     children: React.ReactNode;
@@ -69,6 +70,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                 {/* Footer */}
                 <Footer brandName={brandName} />
             </div>
+
+            {/* Floating AI Chatbox */}
+            <ChatBot />
         </div>
     );
 };

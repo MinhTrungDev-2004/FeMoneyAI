@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-    Heart,
     MapPin,
     Phone,
     Mail,
     Clock,
-    ArrowRight,
 } from "lucide-react";
 
 interface FooterProps {
@@ -152,15 +150,6 @@ const Footer: React.FC<FooterProps> = ({
                         </div>
                     </div>
                 </div>
-            </div>
-
-            {/* ── Bottom bar ── */}
-            <div className="border-t border-gray-200 px-8 py-3 flex flex-col sm:flex-row items-center justify-between gap-1 bg-gray-50">
-                <span className="text-xs text-gray-400 flex items-center gap-1">
-                    © {year} {brandName} · Nền tảng quản lý chi tiêu thông minh được tin dùng nhất Việt Nam
-                    <Heart size={10} className="text-red-400 fill-red-400 mx-0.5" />
-                </span>
-                <span className="text-xs text-gray-300">Bảo lưu mọi quyền</span>
             </div>
         </footer>
     );
