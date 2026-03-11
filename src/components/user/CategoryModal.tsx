@@ -68,12 +68,14 @@ const CategoryModal: React.FC<CategoryModalProps> = ({ mode, initial, onSave, on
                             {PreviewIcon && <PreviewIcon size={22} className={selectedColor.colorClass} strokeWidth={1.5} />}
                         </div>
                         <div>
-                            <p className="text-sm font-bold text-gray-800 mt-0.5">{label || "Tên danh mục"}</p>
+                            <p className="text-xs text-gray-400 mb-0.5 text-left">Xem trước</p>
+                            <p className="text-sm font-bold text-gray-800 mt-0.5 text-left">{label || "Tên danh mục"}</p>
                         </div>
                     </div>
 
                     {/* Category name */}
                     <div>
+
                         <label className="block text-xs font-semibold font-bold text-gray-800 uppercase tracking-wide mb-2 text-left">
                             Tên danh mục
                         </label>

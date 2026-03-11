@@ -8,6 +8,10 @@ import UserEntry from './pages/user/Entry/UserEntry';
 import UserCalendar from './pages/user/Calendar/UserCalendar';
 import UserReport from './pages/user/Report/UserReport';
 import UserBudget from './pages/user/Budget/UserBudget';
+import SmartEntry from './pages/user/SmartEntry/SmartEntry';
+import AiAdvisor from './pages/user/Advisor/AiAdvisor';
+import GoalSaving from './pages/user/Goals/GoalSaving';
+import UserExport from './pages/user/Export/UserExport';
 import './App.css';
 
 function App() {
@@ -34,6 +38,10 @@ function App() {
                 <Route path="/user/report/monthly" element={<UserReport defaultPeriod="Monthly" />} />
                 <Route path="/user/report/yearly" element={<UserReport defaultPeriod="Yearly" />} />
                 <Route path="/user/budget" element={<UserBudget />} />
+                <Route path="/user/goals" element={<GoalSaving />} />
+                <Route path="/user/advisor" element={<AiAdvisor />} />
+                <Route path="/user/smart-entry" element={<SmartEntry />} />
+                <Route path="/user/export" element={<UserExport />} />
             </Routes>
         </Router>
     );

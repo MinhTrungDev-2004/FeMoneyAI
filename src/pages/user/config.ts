@@ -8,6 +8,10 @@ import {
     TrendingDown,
     TrendingUp,
     BarChart,
+    FileDown,
+    ScanLine,
+    Bot,
+    Target,
 } from "lucide-react";
 import { type NavItem } from "../../components/layout/Sidebar";
 
@@ -23,8 +27,7 @@ export const userNavItems: NavItem[] = [
         ],
     },
     { label: "Lịch",      icon: Calendar,  path: "/user/calendar" },
-    {
-        label: "Báo cáo",
+    { label: "Báo cáo",
         icon: PieChart,
         path: "/user/report",
         children: [
@@ -33,5 +36,9 @@ export const userNavItems: NavItem[] = [
         ],
     },
     { label: "Ngân sách", icon: Wallet,    path: "/user/budget" },
+    { label: "Mục Tiêu",  icon: Target,    path: "/user/goals" },
+    { label: "Cố vấn AI",  icon: Bot,       path: "/user/advisor" },
+    { label: "Quét hóa đơn",  icon: ScanLine,  path: "/user/smart-entry" },
+    { label: "Xuất PDF",   icon: FileDown,  path: "/user/export" },
     { label: "Cài đặt",   icon: Settings,  path: "/user/settings" },
 ];

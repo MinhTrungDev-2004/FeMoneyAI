@@ -16,7 +16,6 @@ const Footer: React.FC<FooterProps> = ({
     brandName = "Money AI"
 }) => {
     const navigate = useNavigate();
-    const year = new Date().getFullYear();
     const [email, setEmail] = useState("");
 
     const guideLinks = [
