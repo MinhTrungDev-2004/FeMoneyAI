@@ -63,12 +63,15 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                 />
 
                 {/* Main content */}
-                <main className="flex-1 overflow-y-auto p-6">
-                    {children}
+                <main className="flex-1 overflow-y-auto">
+                    <div className="flex flex-col min-h-full">
+                        <div className="flex-1 p-6">
+                            {children}
+                        </div>
+                        {/* Footer */}
+                        <Footer brandName={brandName} />
+                    </div>
                 </main>
-
-                {/* Footer */}
-                <Footer brandName={brandName} />
             </div>
 
             {/* Floating AI Chatbox */}

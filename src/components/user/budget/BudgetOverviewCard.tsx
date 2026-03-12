@@ -33,7 +33,7 @@ const BudgetOverviewCard: React.FC<BudgetOverviewCardProps> = ({ items, month, y
                     </div>
                     <div>
                         <p className="text-sm font-bold text-gray-800">Tổng ngân sách tháng</p>
-                        <p className="text-xs text-gray-400">{monthLabel}</p>
+                        <p className="text-xs text-gray-400 text-left">{monthLabel}</p>
                     </div>
                 </div>
 
@@ -86,8 +86,8 @@ const BudgetOverviewCard: React.FC<BudgetOverviewCardProps> = ({ items, month, y
             <div className="flex gap-4 mt-4 pt-4 border-t border-gray-100">
                 {[
                     { label: "Danh mục có ngân sách", value: items.filter(b => b.budget).length, color: "text-green-600" },
-                    { label: "Chưa đặt hạn mức",     value: items.filter(b => !b.budget).length, color: "text-gray-400" },
-                    { label: "Vượt ngân sách",         value: items.filter(b => b.budget && b.spent > b.budget).length, color: "text-red-500" },
+                    { label: "Chưa đặt hạn mức", value: items.filter(b => !b.budget).length, color: "text-gray-400" },
+                    { label: "Vượt ngân sách", value: items.filter(b => b.budget && b.spent > b.budget).length, color: "text-red-500" },
                 ].map(stat => (
                     <div key={stat.label} className="flex-1 text-center">
                         <p className={`text-xl font-bold ${stat.color}`}>{stat.value}</p>

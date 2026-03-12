@@ -19,18 +19,18 @@ const GOAL_ICON_LIST = Object.entries(GOAL_ICONS).map(([name, icon]) => ({ name,
 
 const GoalModal: React.FC<GoalModalProps> = ({ mode, editItem, onSave, onClose }) => {
     const isAdd = mode === "add";
-    
+
     const [label, setLabel] = useState(editItem?.label || "");
     const [targetInput, setTargetInput] = useState(editItem?.targetAmount ? editItem.targetAmount.toLocaleString("vi-VN") : "");
     const [deadline, setDeadline] = useState(editItem?.deadline || "");
     const [selectedIconName, setSelectedIconName] = useState(editItem?.iconName || GOAL_ICON_LIST[0].name);
-    
+
     // Tìm màu đang chọn dựa vào class
-    const initialColor = editItem 
+    const initialColor = editItem
         ? BUDGET_COLORS.find(c => c.colorClass === editItem.colorClass) || BUDGET_COLORS[0]
         : BUDGET_COLORS[0];
     const [selectedColor, setSelectedColor] = useState(initialColor);
-    
+
     const [error, setError] = useState("");
 
     // Reset Form
@@ -50,7 +50,7 @@ const GoalModal: React.FC<GoalModalProps> = ({ mode, editItem, onSave, onClose }
 
         if (!label.trim()) { setError("Vui lòng nhập tên mục tiêu."); return; }
         if (!targetAmount || targetAmount <= 0) { setError("Vui lòng nhập số tiền mục tiêu hợp lệ."); return; }
-        
+
         // Validate deadline logic (Option)
         if (deadline) {
             const today = new Date().toISOString().split('T')[0];
@@ -74,12 +74,12 @@ const GoalModal: React.FC<GoalModalProps> = ({ mode, editItem, onSave, onClose }
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
-             onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+            onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
             <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 overflow-hidden animate-in zoom-in-95 duration-200">
                 {/* Header */}
                 <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
                     <h2 className="text-base font-bold text-gray-800">
-                        {isAdd ? "Tạo Mục Tiêu Tiết Kiệm" : "Sửa Mục Tiêu"}
+                        {isAdd ? "Tạo Mục Tiêu Tiết Kiệm" : "Chỉnh sửa mục tiêu"}
                     </h2>
                     <button onClick={onClose} className="w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors">
                         <X size={16} />
@@ -93,7 +93,6 @@ const GoalModal: React.FC<GoalModalProps> = ({ mode, editItem, onSave, onClose }
                             {PreviewIcon && <PreviewIcon size={22} className={selectedColor.colorClass} strokeWidth={1.5} />}
                         </div>
                         <div>
-                            <p className="text-xs text-gray-400 mb-0.5 uppercase tracking-wide font-bold">Xem trước</p>
                             <p className="text-sm font-bold text-gray-800 leading-tight block truncate max-w-[220px]">
                                 {label || "Tên mục tiêu của bạn"}
                             </p>
@@ -103,7 +102,7 @@ const GoalModal: React.FC<GoalModalProps> = ({ mode, editItem, onSave, onClose }
                     {/* Tên & Số tiền */}
                     <div className="grid grid-cols-1 gap-4">
                         <div>
-                            <label className="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">Tên mục tiêu</label>
+                            <label className="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2 text-left">Tên mục tiêu</label>
                             <input
                                 type="text"
                                 value={label}
@@ -115,7 +114,7 @@ const GoalModal: React.FC<GoalModalProps> = ({ mode, editItem, onSave, onClose }
                         </div>
 
                         <div>
-                            <label className="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">Số tiền cần đạt</label>
+                            <label className="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2 text-left">Số tiền cần đạt</label>
                             <div className="relative">
                                 <input
                                     type="text"
@@ -130,7 +129,7 @@ const GoalModal: React.FC<GoalModalProps> = ({ mode, editItem, onSave, onClose }
                         </div>
 
                         <div>
-                            <label className="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">Ngày dự kiến đạt được (Tùy chọn)</label>
+                            <label className="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2 text-left">Ngày dự kiến đạt được (Tùy chọn)</label>
                             <input
                                 type="date"
                                 value={deadline}
@@ -142,7 +141,7 @@ const GoalModal: React.FC<GoalModalProps> = ({ mode, editItem, onSave, onClose }
 
                     {/* Color picker */}
                     <div>
-                        <label className="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">Màu sắc</label>
+                        <label className="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2 text-left">Màu sắc</label>
                         <div className="flex gap-2 flex-wrap">
                             {BUDGET_COLORS.slice(0, 10).map((color) => { // Lấy 10 màu đẹp nhất
                                 const isSelected = selectedColor.colorClass === color.colorClass;
@@ -164,7 +163,7 @@ const GoalModal: React.FC<GoalModalProps> = ({ mode, editItem, onSave, onClose }
 
                     {/* Icon picker */}
                     <div>
-                        <label className="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">Biểu tượng</label>
+                        <label className="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2 text-left">Biểu tượng</label>
                         <div className="flex gap-2 flex-wrap">
                             {GOAL_ICON_LIST.map(({ name, icon: Icon }) => {
                                 const isSelected = selectedIconName === name;

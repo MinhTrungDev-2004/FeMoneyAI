@@ -2,12 +2,12 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
     Menu,
-    Bell,
     ChevronDown,
     User,
     Settings,
     LogOut,
 } from "lucide-react";
+import NotificationDropdown from "./NotificationDropdown";
 
 interface HeaderProps {
     title?: string;
@@ -79,12 +79,7 @@ const Header: React.FC<HeaderProps> = ({
 
             {/* Phải: bell + user dropdown */}
             <div className="flex items-center gap-3">
-                <button className="relative text-gray-400 hover:text-gray-600 transition-colors p-1">
-                    <Bell size={20} />
-                    <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 rounded-full text-[10px] text-white flex items-center justify-center font-bold">
-                        3
-                    </span>
-                </button>
+                <NotificationDropdown />
 
                 {/* User dropdown */}
                 <div className="relative" ref={dropdownRef}>

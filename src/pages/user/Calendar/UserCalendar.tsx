@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { UtensilsCrossed, ChevronLeft, ChevronRight } from "lucide-react";
+import { UtensilsCrossed, ChevronLeft, ChevronRight, CalendarDays } from "lucide-react";
 import DashboardLayout from "../../../components/layout/DashboardLayout";
 import { userNavItems } from "../config";
 
@@ -44,8 +44,24 @@ const UserCalendar: React.FC = () => {
 
     return (
         <DashboardLayout navItems={userNavItems} pageTitle="Lịch" userName="Người dùng" brandName="Money AI">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Left: Calendar */}
+            {/* Header giới thiệu */}
+            <div className="mb-6 mt-2">
+                <div className="flex items-center justify-between w-full mb-2 gap-4">
+                    <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-2xl bg-orange-100 flex items-center justify-center text-orange-500 shadow-sm">
+                            <CalendarDays size={25} />
+                        </div>
+                        <div>
+                            <h2 className="text-1xl font-bold text-gray-800 text-left">Lịch Giao Dịch</h2>
+                            <p className="text-gray-500 text-sm">Theo dõi thu chi chi tiết theo từng ngày trong tháng.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="w-full py-4">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    {/* Left: Calendar */}
                 <div className="lg:col-span-2">
                     <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                         {/* Month nav */}
@@ -152,6 +168,7 @@ const UserCalendar: React.FC = () => {
                         ))}
                     </div>
                 </div>
+            </div>
             </div>
         </DashboardLayout>
     );

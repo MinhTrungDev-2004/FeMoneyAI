@@ -28,7 +28,7 @@ const Footer: React.FC<FooterProps> = ({
     return (
         <footer className="shrink-0 border-t border-gray-100 bg-gray-50">
             {/* ── Main body ── */}
-            <div className="px-8 py-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-left">
+            <div className="px-5 py-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-left">
 
                 {/* Col 1 – Thông tin liên hệ */}
                 <div className="flex flex-col gap-4">

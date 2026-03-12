@@ -90,7 +90,7 @@ const MonthPicker: React.FC<MonthPickerProps> = ({ year, month, onChange, classN
 
             {/* Popup chọn tháng */}
             {isOpen && (
-                <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-100 p-4 z-50">
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-100 p-4 z-50">
                     {/* Header: Đổi năm */}
                     <div className="flex items-center justify-between mb-4">
                         <button
@@ -116,7 +116,7 @@ const MonthPicker: React.FC<MonthPickerProps> = ({ year, month, onChange, classN
                                 <button
                                     key={i}
                                     onClick={() => handleSelectMonth(i)}
-                                    className={`py-2 text-sm rounded-lg transition-colors ${isSelected
+                                    className={`py-2 text-sm rounded-lg transition-colors flex items-center justify-center transition-all ${isSelected
                                         ? "bg-orange-500 text-white font-bold shadow-sm shadow-orange-200"
                                         : "text-gray-600 hover:bg-orange-50 hover:text-orange-600 font-medium"
                                         }`}

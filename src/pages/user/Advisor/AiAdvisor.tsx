@@ -33,19 +33,20 @@ const AiAdvisor: React.FC = () => {
     return (
         <DashboardLayout navItems={userNavItems} pageTitle="Cố Vấn AI" userName="Người dùng" brandName="Money AI">
 
-            <div className="max-w-6xl mx-auto py-4">
-                {/* Header */}
-                <div className="mb-8">
-                    <div className="flex items-center gap-3 mb-2">
-                        <div className="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center text-indigo-600">
-                            <BrainCircuit size={24} />
-                        </div>
-                        <div>
-                            <h2 className="text-2xl font-bold text-gray-800 text-left">Cố Vấn Tài Chính AI</h2>
-                            <p className="text-gray-500 text-sm">Phân tích hành vi chi tiêu và đưa ra chiến lược tối ưu túi tiền của bạn.</p>
-                        </div>
+            {/* Header giới thiệu */}
+            <div className="mb-6 mt-2">
+                <div className="flex items-center gap-3 mb-2">
+                    <div className="w-12 h-12 rounded-2xl bg-indigo-100 flex items-center justify-center text-indigo-600 shadow-sm">
+                        <BrainCircuit size={25} />
+                    </div>
+                    <div>
+                        <h2 className="text-1xl font-bold text-gray-800 text-left">Cố Vấn Tài Chính AI</h2>
+                        <p className="text-gray-500 text-sm">Phân tích hành vi chi tiêu và đưa ra chiến lược tối ưu túi tiền của bạn.</p>
                     </div>
                 </div>
+            </div>
+
+            <div className="w-full py-4">
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
 

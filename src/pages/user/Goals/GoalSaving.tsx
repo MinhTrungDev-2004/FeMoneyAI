@@ -70,22 +70,33 @@ const GoalSaving: React.FC = () => {
 
     return (
         <DashboardLayout navItems={userNavItems} pageTitle="Mục Tiêu Tiết Kiệm" userName="Người dùng" brandName="Money AI">
-            <div className="max-w-6xl mx-auto py-4">
-
-                {/* Header Section */}
-                <div className="flex items-center justify-between w-full mb-6 gap-4">
-                    <p className="text-gray-500 text-sm">Lập kế hoạch và theo dõi dòng tiền cho những mơ ước của bạn.</p>
+            {/* Header giới thiệu */}
+            <div className="mb-6 mt-2">
+                <div className="flex items-center justify-between w-full mb-2 gap-4">
+                    <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-2xl bg-orange-100 flex items-center justify-center text-orange-500 shadow-sm">
+                            <Target size={25} />
+                        </div>
+                        <div>
+                            <h2 className="text-1xl font-bold text-gray-800 text-left">Mục Tiêu Tiết Kiệm</h2>
+                            <p className="text-gray-500 text-sm">Lập kế hoạch và theo dõi dòng tiền cho những mơ ước của bạn.</p>
+                        </div>
+                    </div>
                     
-                    <button
-                        onClick={handleOpenAddGoal}
-                        className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 active:scale-95
-                                   text-white rounded-xl px-5 h-[44px] text-sm font-semibold transition-all
-                                   shadow-sm shadow-orange-200 whitespace-nowrap"
-                    >
-                        <PlusCircle size={16} strokeWidth={2.5} /> Thêm mục tiêu
-                    </button>
+                    <div className="flex items-center gap-4">
+                        <button
+                            onClick={handleOpenAddGoal}
+                            className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 active:scale-95
+                                       text-white rounded-xl px-5 h-[44px] text-sm font-semibold transition-all
+                                       shadow-sm shadow-orange-200 whitespace-nowrap"
+                        >
+                            <PlusCircle size={16} strokeWidth={2.5} /> Thêm mục tiêu
+                        </button>
+                    </div>
                 </div>
+            </div>
 
+            <div className="w-full py-4">
                 {/* Goals Grid */}
                 {goals.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
