@@ -6,10 +6,12 @@ import CategoryModal from "../../../components/user/CategoryModal";
 import CategoryItem from "../../../components/user/CategoryItem";
 import {
     type Category,
-    DEFAULT_EXPENSE_CATEGORIES,
-    DEFAULT_INCOME_CATEGORIES,
     ICON_MAP,
+    AVAILABLE_COLORS,
 } from "../../../components/user/categoryData";
+import { categoryService } from "../../../services/categoryService";
+import { transactionService } from "../../../services/transactionService";
+import { useToast } from "../../../components/ui/Toast";
 
 function fmtDate(d: Date) {
     const days = ["Chủ nhật", "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7"];
@@ -20,11 +22,9 @@ interface UserEntryProps {
     defaultType?: "Tiền chi" | "Tiền thu";
 }
 
-import { categoryService } from "../../../services/categoryService";
-import { transactionService } from "../../../services/transactionService";
-
 const UserEntry: React.FC<UserEntryProps> = ({ defaultType = "Tiền chi" }) => {
     const type = defaultType;
+    const { showToast } = useToast();
 
     // --- Transaction form state ---
     const [date, setDate] = useState(new Date());
@@ -33,8 +33,52 @@ const UserEntry: React.FC<UserEntryProps> = ({ defaultType = "Tiền chi" }) => 
     const [selectedCatId, setSelectedCatId] = useState<string | null>(null);
 
     // --- Category state ---
-    const [expenseCategories, setExpenseCategories] = useState<Category[]>(DEFAULT_EXPENSE_CATEGORIES);
-    const [incomeCategories, setIncomeCategories] = useState<Category[]>(DEFAULT_INCOME_CATEGORIES);
+    const [expenseCategories, setExpenseCategories] = useState<Category[]>([]);
+    const [incomeCategories, setIncomeCategories] = useState<Category[]>([]);
+
+    // --- Fetch Categories ---
+    React.useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const data = await categoryService.getAll();
+                console.log("Full data from API:", data);
+                
+                if (!data || !Array.isArray(data)) {
+                    console.log("No categories array received");
+                    return;
+                }
+
+                // Map API response to UI Category format
+                const mapped: Category[] = data.map(item => {
+                    const icon = ICON_MAP[item.icon] || ICON_MAP["Star"];
+                    const colorMatch = AVAILABLE_COLORS.find(c => c.colorClass === item.colorCode) || AVAILABLE_COLORS[0];
+                    
+                    return {
+                        id: String(item.id),
+                        label: item.name,
+                        icon,
+                        iconName: item.icon,
+                        colorClass: colorMatch.colorClass,
+                        bgClass: colorMatch.bgClass,
+                        type: item.type
+                    };
+                });
+
+                console.log("Mapped categories:", mapped);
+
+                const expense = mapped.filter(c => c.type === "EXPENSE");
+                const income = mapped.filter(c => c.type === "INCOME");
+                
+                console.log(`Filtered: ${expense.length} expenses, ${income.length} incomes`);
+
+                setExpenseCategories(expense);
+                setIncomeCategories(income);
+            } catch (err) {
+                console.error("Failed to fetch categories:", err);
+            }
+        };
+        fetchCategories();
+    }, []);
 
     // --- Edit mode state (toggle to show edit/delete on all cards) ---
     const [isEditMode, setIsEditMode] = useState(false);
@@ -58,7 +102,7 @@ const UserEntry: React.FC<UserEntryProps> = ({ defaultType = "Tiền chi" }) => 
     // --- Submit ---
     const handleSubmit = async () => {
         if (!amount || !selectedCatId) {
-            alert("Vui lòng chọn danh mục và nhập số tiền.");
+            showToast("Vui lòng chọn danh mục và nhập số tiền.", "warning");
             return;
         }
 
@@ -74,13 +118,13 @@ const UserEntry: React.FC<UserEntryProps> = ({ defaultType = "Tiền chi" }) => 
                 note: note,
             });
 
-            alert(`Đã ghi ${type}: ${Number(amount).toLocaleString("vi-VN")}đ – ${selectedCat?.label}`);
+            showToast("Đã ghi dữ liệu", "success");
             setAmount("");
             setNote("");
             setSelectedCatId(null);
-        } catch (err) {
+        } catch (err: any) {
             console.error("Failed to create transaction:", err);
-            alert("Có lỗi xảy ra khi lưu giao dịch. Vui lòng thử lại.");
+            showToast("Có lỗi xảy ra khi lưu giao dịch. Vui lòng thử lại.", "error");
         } finally {
             setLoading(false);
         }
@@ -99,10 +143,16 @@ const UserEntry: React.FC<UserEntryProps> = ({ defaultType = "Tiền chi" }) => 
         setModalOpen(true);
     };
 
-    const handleDelete = (catId: string) => {
+    const handleDelete = async (catId: string) => {
         if (!window.confirm("Bạn có chắc muốn xóa danh mục này không?")) return;
-        setCategories(prev => prev.filter(c => c.id !== catId));
-        if (selectedCatId === catId) setSelectedCatId(null);
+        try {
+            await categoryService.delete(Number(catId));
+            setCategories(prev => prev.filter(c => c.id !== catId));
+            if (selectedCatId === catId) setSelectedCatId(null);
+        } catch (err) {
+            console.error("Failed to delete category:", err);
+            showToast("Có lỗi xảy ra khi xóa danh mục.", "error");
+        }
     };
 
     const handleSaveModal = async (data: { label: string; iconName: string; colorClass: string; bgClass: string }) => {
@@ -110,7 +160,7 @@ const UserEntry: React.FC<UserEntryProps> = ({ defaultType = "Tiền chi" }) => 
         if (modalMode === "add") {
             try {
                 // Map UI type to API type
-                const apiType = type === "Tiền chi" ? "CHI" : "THU";
+                const apiType = type === "Tiền chi" ? "EXPENSE" : "INCOME";
 
                 // Call API to create category
                 const created = await categoryService.create({
@@ -127,20 +177,36 @@ const UserEntry: React.FC<UserEntryProps> = ({ defaultType = "Tiền chi" }) => 
                     iconName: created.icon,
                     colorClass: created.colorCode,
                     bgClass: data.bgClass,
+                    type: created.type
                 };
                 setCategories(prev => [...prev, newCat]);
+                showToast("Thêm danh mục thành công", "success");
             } catch (err) {
                 console.error("Failed to create category:", err);
-                alert("Có lỗi xảy ra khi thêm danh mục. Vui lòng thử lại.");
+                showToast("Có lỗi xảy ra khi thêm danh mục. Vui lòng thử lại.", "error");
             }
         } else if (editingCategory) {
-            setCategories(prev =>
-                prev.map(c =>
-                    c.id === editingCategory.id
-                        ? { ...c, label: data.label, icon, iconName: data.iconName, colorClass: data.colorClass, bgClass: data.bgClass }
-                        : c
-                )
-            );
+            try {
+                const apiType = type === "Tiền chi" ? "EXPENSE" : "INCOME";
+                await categoryService.update(Number(editingCategory.id), {
+                    name: data.label,
+                    type: apiType,
+                    icon: data.iconName,
+                    colorCode: data.colorClass
+                });
+
+                setCategories(prev =>
+                    prev.map(c =>
+                        c.id === editingCategory.id
+                            ? { ...c, label: data.label, icon, iconName: data.iconName, colorClass: data.colorClass, bgClass: data.bgClass, type: apiType }
+                            : c
+                    )
+                );
+                showToast("Cập nhật danh mục thành công", "success");
+            } catch (err) {
+                console.error("Failed to update category:", err);
+                showToast("Có lỗi xảy ra khi cập nhật danh mục.", "error");
+            }
         }
         setModalOpen(false);
     };

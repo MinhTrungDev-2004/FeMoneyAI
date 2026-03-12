@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Calendar, Tag, CreditCard, ChevronRight, CheckCircle2 } from 'lucide-react';
-import { DEFAULT_EXPENSE_CATEGORIES } from '../categoryData';
+import { type Category, ICON_MAP, AVAILABLE_COLORS } from '../categoryData';
+import { categoryService } from '../../../services/categoryService';
 
 // Giả lập DTO dữ liệu trả về từ AI
 export interface ExtractedData {
@@ -22,16 +23,45 @@ const ExtractedResultForm: React.FC<ExtractedResultFormProps> = ({ data, imageUr
     const [date, setDate] = useState(data.date);
     const [note, setNote] = useState(data.note);
 
-    // Map từ tên do AI tự sinh sang danh mục có sẵn của User (đế user chọn)
-    const [selectedCatId, setSelectedCatId] = useState<string>(
-        DEFAULT_EXPENSE_CATEGORIES.find(c => c.label.toLowerCase().includes(data.categoryName.toLowerCase()))?.id || DEFAULT_EXPENSE_CATEGORIES[0].id
-    );
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [selectedCatId, setSelectedCatId] = useState<string>("");
+
+    // --- Fetch Categories ---
+    React.useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const apiResponse = await categoryService.getAll();
+                const mapped: Category[] = (apiResponse || [])
+                    .filter(item => item.type === "EXPENSE") // AI extraction is usually for expenses
+                    .map(item => {
+                        const icon = ICON_MAP[item.icon] || ICON_MAP["Star"];
+                        const colorMatch = AVAILABLE_COLORS.find(c => c.colorClass === item.colorCode) || AVAILABLE_COLORS[0];
+                        return {
+                            id: String(item.id),
+                            label: item.name,
+                            icon,
+                            iconName: item.icon,
+                            colorClass: colorMatch.colorClass,
+                            bgClass: colorMatch.bgClass,
+                        };
+                    });
+                setCategories(mapped);
+                
+                // Set initial selection based on AI prediction
+                const predicted = mapped.find(c => c.label.toLowerCase().includes(data.categoryName?.toLowerCase() || ""));
+                setSelectedCatId(predicted?.id || mapped[0]?.id || "");
+            } catch (err) {
+                console.error("Failed to fetch categories in ExtractedResultForm:", err);
+            }
+        };
+        fetchCategories();
+    }, [data.categoryName]);
 
     const formatCurrency = (val: string) => val.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
     const handleSave = () => {
         const rawAmount = parseInt(amount.replace(/\./g, ""), 10);
-        const cat = DEFAULT_EXPENSE_CATEGORIES.find(c => c.id === selectedCatId);
+        const cat = categories.find(c => c.id === selectedCatId);
 
         if (!rawAmount || !date) {
             alert("Vui lòng nhập đủ Số tiền và Ngày");
@@ -111,7 +141,7 @@ const ExtractedResultForm: React.FC<ExtractedResultFormProps> = ({ data, imageUr
                                     onChange={e => setSelectedCatId(e.target.value)}
                                     className="w-full pl-4 pr-10 py-3 border border-gray-200 rounded-xl text-sm font-semibold text-gray-700 appearance-none outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition-all bg-white"
                                 >
-                                    {DEFAULT_EXPENSE_CATEGORIES.map(cat => (
+                                    {categories.map(cat => (
                                         <option key={cat.id} value={cat.id}>{cat.label}</option>
                                     ))}
                                 </select>

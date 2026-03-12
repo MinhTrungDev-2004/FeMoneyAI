@@ -48,7 +48,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
                     border-2 ${isSelected ? "border-orange-400" : "border-gray-200"}
                     ${showActions
                         ? "opacity-100 pointer-events-auto"
-                        : "opacity-0 group-hover:opacity-100 pointer-events-none"
+                        : "opacity-0 pointer-events-none"
                     }`}
             >
                 <button

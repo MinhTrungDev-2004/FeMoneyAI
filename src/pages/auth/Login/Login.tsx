@@ -36,8 +36,17 @@ const Login: React.FC = () => {
                 data?.accessToken || data?.access_token ||
                 data?.data?.accessToken || data?.data?.token || data?.token;
 
+            if (token) {
+                localStorage.setItem("token", token);
+                localStorage.setItem("user", JSON.stringify(data));
+            }
+
             const role = extractRole(data, token);
             console.log("Login role:", role);
+
+            if (token) {
+                localStorage.setItem("role", role || "");
+            }
 
             if (typeof role === "string" && (role.toLowerCase() === "admin" || role.includes("ADMIN"))) {
                 navigate("/admin/home");

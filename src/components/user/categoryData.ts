@@ -14,6 +14,7 @@ export interface Category {
     iconName: string;
     colorClass: string; // text-* (icon color)
     bgClass: string;    // bg-* (icon bg)
+    type?: "EXPENSE" | "INCOME";
 }
 
 // All available icons for user to pick
@@ -73,26 +74,5 @@ export const AVAILABLE_COLORS: { label: string; colorClass: string; bgClass: str
     { label: "Hồng đậm", colorClass: "text-rose-500", bgClass: "bg-rose-50" },
 ];
 
-// Default categories
-export const DEFAULT_EXPENSE_CATEGORIES: Category[] = [
-    { id: "e1", label: "Ăn uống", icon: UtensilsCrossed, iconName: "UtensilsCrossed", colorClass: "text-orange-500", bgClass: "bg-orange-50" },
-    { id: "e2", label: "Chi tiêu hàng ngày", icon: ShoppingBag, iconName: "ShoppingBag", colorClass: "text-green-500", bgClass: "bg-green-50" },
-    { id: "e3", label: "Quần áo", icon: Shirt, iconName: "Shirt", colorClass: "text-blue-500", bgClass: "bg-blue-50" },
-    { id: "e4", label: "Mỹ phẩm", icon: Sparkles, iconName: "Sparkles", colorClass: "text-pink-500", bgClass: "bg-pink-50" },
-    { id: "e5", label: "Phí giao lưu", icon: Users, iconName: "Users", colorClass: "text-yellow-500", bgClass: "bg-yellow-50" },
-    { id: "e6", label: "Y tế", icon: HeartPulse, iconName: "HeartPulse", colorClass: "text-teal-500", bgClass: "bg-teal-50" },
-    { id: "e7", label: "Giáo dục", icon: BookOpen, iconName: "BookOpen", colorClass: "text-orange-600", bgClass: "bg-orange-100" },
-    { id: "e8", label: "Tiền điện", icon: Zap, iconName: "Zap", colorClass: "text-cyan-500", bgClass: "bg-cyan-50" },
-    { id: "e9", label: "Đi lại", icon: Train, iconName: "Train", colorClass: "text-gray-600", bgClass: "bg-gray-100" },
-    { id: "e10", label: "Phí liên lạc", icon: Phone, iconName: "Phone", colorClass: "text-indigo-500", bgClass: "bg-indigo-50" },
-    { id: "e11", label: "Tiền nhà", icon: Home, iconName: "Home", colorClass: "text-amber-600", bgClass: "bg-amber-50" },
-];
-
-export const DEFAULT_INCOME_CATEGORIES: Category[] = [
-    { id: "i1", label: "Tiền lương", icon: Wallet, iconName: "Wallet", colorClass: "text-green-500", bgClass: "bg-green-50" },
-    { id: "i2", label: "Tiền phụ cấp", icon: Briefcase, iconName: "Briefcase", colorClass: "text-orange-500", bgClass: "bg-orange-50" },
-    { id: "i3", label: "Tiền thưởng", icon: Gift, iconName: "Gift", colorClass: "text-red-500", bgClass: "bg-red-50" },
-    { id: "i4", label: "Thu nhập phụ", icon: Coins, iconName: "Coins", colorClass: "text-teal-500", bgClass: "bg-teal-50" },
-    { id: "i5", label: "Đầu tư", icon: TrendingUp, iconName: "TrendingUp", colorClass: "text-blue-500", bgClass: "bg-blue-50" },
-    { id: "i6", label: "Thu nhập tạm thời", icon: PiggyBank, iconName: "PiggyBank", colorClass: "text-pink-500", bgClass: "bg-pink-50" },
-];
+// Default categories are now fetched from the backend API.
+// Use Category interface and ICON_MAP for rendering.

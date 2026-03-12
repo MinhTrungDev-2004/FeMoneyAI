@@ -14,11 +14,14 @@ import GoalSaving from './pages/user/Goals/GoalSaving';
 import UserExport from './pages/user/Export/UserExport';
 import './App.css';
 
+import { ToastProvider } from './components/ui/Toast';
+
 function App() {
     return (
-        <Router>
-            <Routes>
-                <Route path="/" element={<Navigate to="/login" replace />} />
+        <ToastProvider>
+            <Router>
+                <Routes>
+                    <Route path="/" element={<Navigate to="/login" replace />} />
 
                 {/* Auth routes */}
                 <Route path="/login" element={<Login />} />
@@ -43,7 +46,8 @@ function App() {
                 <Route path="/user/smart-entry" element={<SmartEntry />} />
                 <Route path="/user/export" element={<UserExport />} />
             </Routes>
-        </Router>
+            </Router>
+        </ToastProvider>
     );
 }
 

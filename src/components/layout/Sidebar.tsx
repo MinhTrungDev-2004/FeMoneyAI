@@ -56,14 +56,16 @@ const Sidebar: React.FC<SidebarProps> = ({
         >
             {/* Logo */}
             <div className="flex items-center gap-2 px-4 h-14 border-b border-gray-200 shrink-0">
-                <div className="w-7 h-7 rounded bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center shrink-0">
-                    <span className="text-white text-xs font-extrabold">M</span>
-                </div>
-                {!collapsed && (
-                    <span className="text-gray-800 font-bold text-sm tracking-tight">
-                        {brandName}
-                    </span>
-                )}
+                <a href="/user/home" className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center shrink-0">
+                        <span className="text-white text-xs font-extrabold">M</span>
+                    </div>
+                    {!collapsed && (
+                        <span className="text-gray-800 font-bold text-sm tracking-tight">
+                            {brandName}
+                        </span>
+                    )}
+                </a>
             </div>
 
             {/* Nav */}
