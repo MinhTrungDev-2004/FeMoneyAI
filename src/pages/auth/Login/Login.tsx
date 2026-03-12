@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { authService, extractRole } from "../../../services/authService";
 import { Mail, Lock } from "lucide-react";
 import { Input } from "../../../components/ui/Input";
 import { Button } from "../../../components/ui/Button";
@@ -17,31 +17,6 @@ const LoginIllustration: React.FC = () => (
     </div>
 );
 
-function extractRole(data: any, token?: string): string | undefined {
-    let role =
-        data?.role || data?.data?.role || data?.user?.role || data?.data?.user?.role;
-
-    if (token && !role) {
-        try {
-            const base64 = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
-            const payload = JSON.parse(
-                decodeURIComponent(
-                    atob(base64)
-                        .split("")
-                        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-                        .join(""),
-                ),
-            );
-            role = payload?.role || payload?.roles || payload?.Role || payload?.authorities;
-            if (Array.isArray(role)) {
-                role = role.find((r) => r.toLowerCase().includes("admin")) || role[0];
-            }
-        } catch {
-        }
-    }
-    return role;
-}
-
 const Login: React.FC = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
@@ -55,7 +30,7 @@ const Login: React.FC = () => {
         setIsLoading(true);
 
         try {
-            const { data } = await axios.post("/public/auth/login", { email, password });
+            const data = await authService.login({ email, password });
 
             const token =
                 data?.accessToken || data?.access_token ||

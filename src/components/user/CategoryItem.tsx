@@ -47,15 +47,15 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
                     flex flex-col items-center justify-center gap-2
                     border-2 ${isSelected ? "border-orange-400" : "border-gray-200"}
                     ${showActions
-                        ? "opacity-100"
-                        : "opacity-0 group-hover:opacity-100"
+                        ? "opacity-100 pointer-events-auto"
+                        : "opacity-0 group-hover:opacity-100 pointer-events-none"
                     }`}
             >
                 <button
                     onClick={(e) => { e.stopPropagation(); onEdit(); }}
                     title="Chỉnh sửa"
                     className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-500 hover:bg-blue-600
-                               text-white text-[11px] font-semibold transition-colors shadow-sm cursor-pointer"
+                               text-white text-[11px] font-semibold transition-colors shadow-sm cursor-pointer pointer-events-auto"
                 >
                     <Pencil size={11} />
                     Sửa
@@ -64,7 +64,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
                     onClick={(e) => { e.stopPropagation(); onDelete(); }}
                     title="Xóa"
                     className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-500 hover:bg-red-600
-                               text-white text-[11px] font-semibold transition-colors shadow-sm cursor-pointer"
+                               text-white text-[11px] font-semibold transition-colors shadow-sm cursor-pointer pointer-events-auto"
                 >
                     <Trash2 size={11} />
                     Xóa

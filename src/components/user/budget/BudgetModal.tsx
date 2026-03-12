@@ -98,7 +98,6 @@ const BudgetModal: React.FC<BudgetModalProps> = ({ mode, editItem, onSave, onClo
                                     {PreviewIcon && <PreviewIcon size={22} className={selectedColor.colorClass} strokeWidth={1.5} />}
                                 </div>
                                 <div>
-                                    <p className="text-xs text-gray-400 mb-0.5">Xem trước</p>
                                     <p className="text-sm font-bold text-gray-800">{label || "Tên danh mục"}</p>
                                 </div>
                             </div>

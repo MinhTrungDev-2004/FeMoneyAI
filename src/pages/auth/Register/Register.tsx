@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { authService } from "../../../services/authService";
 import { Mail, Lock } from "lucide-react";
 import { Input } from "../../../components/ui/Input";
 import { Button } from "../../../components/ui/Button";
@@ -59,7 +59,7 @@ const Register: React.FC = () => {
         setIsLoading(true);
 
         try {
-            await axios.post("http://localhost:8081/public/auth/register", {
+            await authService.register({
                 email,
                 password,
             });

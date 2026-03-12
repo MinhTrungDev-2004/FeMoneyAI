@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { authService } from "../../../services/authService";
 import { Mail } from "lucide-react";
 import { Input } from "../../../components/ui/Input";
 import { Button } from "../../../components/ui/Button";
@@ -72,7 +72,7 @@ const ForgotPassword: React.FC = () => {
         setIsLoading(true);
 
         try {
-            await axios.post("/public/auth/forgot-password", { email });
+            await authService.forgotPassword(email);
             setSuccess(true);
         } catch (err: any) {
             setError(

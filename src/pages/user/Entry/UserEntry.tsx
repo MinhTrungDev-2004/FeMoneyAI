@@ -20,6 +20,9 @@ interface UserEntryProps {
     defaultType?: "Tiền chi" | "Tiền thu";
 }
 
+import { categoryService } from "../../../services/categoryService";
+import { transactionService } from "../../../services/transactionService";
+
 const UserEntry: React.FC<UserEntryProps> = ({ defaultType = "Tiền chi" }) => {
     const type = defaultType;
 
@@ -41,6 +44,8 @@ const UserEntry: React.FC<UserEntryProps> = ({ defaultType = "Tiền chi" }) => 
     const [modalMode, setModalMode] = useState<"add" | "edit">("add");
     const [editingCategory, setEditingCategory] = useState<Category | null>(null);
 
+    const [loading, setLoading] = useState(false);
+
     // --- Helpers ---
     const categories = type === "Tiền chi" ? expenseCategories : incomeCategories;
     const setCategories = type === "Tiền chi" ? setExpenseCategories : setIncomeCategories;
@@ -51,13 +56,34 @@ const UserEntry: React.FC<UserEntryProps> = ({ defaultType = "Tiền chi" }) => 
     const selectedCat = categories.find(c => c.id === selectedCatId) ?? null;
 
     // --- Submit ---
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (!amount || !selectedCatId) {
             alert("Vui lòng chọn danh mục và nhập số tiền.");
             return;
         }
-        alert(`Đã ghi ${type}: ${Number(amount).toLocaleString("vi-VN")}đ – ${selectedCat?.label}`);
-        setAmount(""); setNote(""); setSelectedCatId(null);
+
+        setLoading(true);
+        try {
+            // Format date to YYYY-MM-DD
+            const formattedDate = date.toISOString().split("T")[0];
+
+            await transactionService.create({
+                categoryId: Number(selectedCatId),
+                amount: Number(amount),
+                transactionDate: formattedDate,
+                note: note,
+            });
+
+            alert(`Đã ghi ${type}: ${Number(amount).toLocaleString("vi-VN")}đ – ${selectedCat?.label}`);
+            setAmount("");
+            setNote("");
+            setSelectedCatId(null);
+        } catch (err) {
+            console.error("Failed to create transaction:", err);
+            alert("Có lỗi xảy ra khi lưu giao dịch. Vui lòng thử lại.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     // --- Category handlers ---
@@ -79,18 +105,34 @@ const UserEntry: React.FC<UserEntryProps> = ({ defaultType = "Tiền chi" }) => 
         if (selectedCatId === catId) setSelectedCatId(null);
     };
 
-    const handleSaveModal = (data: { label: string; iconName: string; colorClass: string; bgClass: string }) => {
+    const handleSaveModal = async (data: { label: string; iconName: string; colorClass: string; bgClass: string }) => {
         const icon = ICON_MAP[data.iconName];
         if (modalMode === "add") {
-            const newCat: Category = {
-                id: `custom_${Date.now()}`,
-                label: data.label,
-                icon,
-                iconName: data.iconName,
-                colorClass: data.colorClass,
-                bgClass: data.bgClass,
-            };
-            setCategories(prev => [...prev, newCat]);
+            try {
+                // Map UI type to API type
+                const apiType = type === "Tiền chi" ? "CHI" : "THU";
+
+                // Call API to create category
+                const created = await categoryService.create({
+                    name: data.label,
+                    type: apiType,
+                    icon: data.iconName,
+                    colorCode: data.colorClass
+                });
+
+                const newCat: Category = {
+                    id: String(created.id),
+                    label: created.name,
+                    icon,
+                    iconName: created.icon,
+                    colorClass: created.colorCode,
+                    bgClass: data.bgClass,
+                };
+                setCategories(prev => [...prev, newCat]);
+            } catch (err) {
+                console.error("Failed to create category:", err);
+                alert("Có lỗi xảy ra khi thêm danh mục. Vui lòng thử lại.");
+            }
         } else if (editingCategory) {
             setCategories(prev =>
                 prev.map(c =>
@@ -168,7 +210,7 @@ const UserEntry: React.FC<UserEntryProps> = ({ defaultType = "Tiền chi" }) => 
                                 </div>
                                 <div>
                                     <p className="text-xs text-orange-500 font-semibold uppercase tracking-wide">Danh mục đã chọn</p>
-                                    <p className="text-sm font-bold text-gray-800 mt-0.5">{selectedCat.label}</p>
+                                    <p className="text-sm font-bold text-gray-800 mt-0.5 text-left">{selectedCat.label}</p>
                                 </div>
                             </div>
                             <button onClick={() => setSelectedCatId(null)} className="text-gray-400 hover:text-gray-600 text-xl leading-none">×</button>
@@ -178,9 +220,14 @@ const UserEntry: React.FC<UserEntryProps> = ({ defaultType = "Tiền chi" }) => 
                     {/* Submit */}
                     <button
                         onClick={handleSubmit}
-                        className="w-full py-4 bg-orange-500 hover:bg-orange-600 active:scale-95 text-white text-base font-bold rounded-xl shadow-md shadow-orange-100 transition-all"
+                        disabled={loading}
+                        className={`w-full py-4 text-white text-base font-bold rounded-xl shadow-md transition-all
+                            ${loading
+                                ? "bg-gray-400 cursor-not-allowed"
+                                : "bg-orange-500 hover:bg-orange-600 active:scale-95 shadow-orange-100"
+                            }`}
                     >
-                        {type === "Tiền chi" ? "Nhập khoản chi" : "Nhập khoản thu"}
+                        {loading ? "Đang lưu..." : (type === "Tiền chi" ? "Nhập khoản chi" : "Nhập khoản thu")}
                     </button>
                 </div>
 

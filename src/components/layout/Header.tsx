@@ -9,6 +9,8 @@ import {
 } from "lucide-react";
 import NotificationDropdown from "./NotificationDropdown";
 
+import { logout } from "../../services/authService";
+
 interface HeaderProps {
     title?: string;
     breadcrumbs?: { label: string; path?: string }[];
@@ -36,10 +38,20 @@ const Header: React.FC<HeaderProps> = ({
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
+    const handleLogout = async () => {
+        try {
+            await logout();
+        } catch (error) {
+            console.error("Logout failed:", error);
+        } finally {
+            navigate("/login");
+        }
+    };
+
     const menuItems = [
         { icon: User, label: "Hồ sơ cá nhân", action: () => navigate("/admin/profile") },
         { icon: Settings, label: "Cài đặt tài khoản", action: () => navigate("/admin/settings") },
-        { icon: LogOut, label: "Đăng xuất", action: () => navigate("/login"), danger: true },
+        { icon: LogOut, label: "Đăng xuất", action: handleLogout, danger: true },
     ];
 
     return (
