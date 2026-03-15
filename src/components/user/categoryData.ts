@@ -74,5 +74,4 @@ export const AVAILABLE_COLORS: { label: string; colorClass: string; bgClass: str
     { label: "Hồng đậm", colorClass: "text-rose-500", bgClass: "bg-rose-50" },
 ];
 
-// Default categories are now fetched from the backend API.
-// Use Category interface and ICON_MAP for rendering.
+
